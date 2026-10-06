@@ -1,0 +1,196 @@
+{
+  "cases": [
+    {
+      "description": "The source says 'Neither drowsiness nor sleep overtakes Him'. The faulty Urdu draft drops both negation markers (نہ), which reverses the meaning entirely. RajiAI must flag this as a high-severity negation change — and offer evidence only, never a verdict.",
+      "draft_lang": "ur",
+      "draft_text": "اسے اونگھ آتی ہے اور نیند آتی ہے۔",
+      "expected_flags": [
+        "negation"
+      ],
+      "id": "negation-2-255",
+      "source_lang": "en",
+      "source_text": "Neither drowsiness nor sleep overtakes Him.",
+      "title": "Missing negation — Ayat al-Kursi (Quran 2:255)"
+    },
+    {
+      "description": "A numeric value is altered between source and draft, including an Arabic-Indic digit variant (٩٩ → ٩٨), which RajiAI normalizes before comparing.",
+      "draft_lang": "en",
+      "draft_text": "Allah has 98 names. Whoever learns them will enter Paradise. اللہ کے ٩٨ نام ہیں۔",
+      "expected_flags": [
+        "numbers"
+      ],
+      "id": "numbers-99-names",
+      "source_lang": "en",
+      "source_text": "Allah has 99 names. Whoever learns them will enter Paradise. اللہ کے ٩٩ نام ہیں۔",
+      "title": "Number changed — 99 names"
+    },
+    {
+      "description": "A distinctive proper name present in the source is absent from the draft. RajiAI flags the missing token with evidence; the reviewer decides whether the omission matters.",
+      "draft_lang": "en",
+      "draft_text": "It was narrated: The Prophet said, 'The best among you are those who learn the Quran and teach it.'",
+      "expected_flags": [
+        "names"
+      ],
+      "id": "names-dropped-narrator",
+      "source_lang": "en",
+      "source_text": "Narrated by Abu Hurairah: The Prophet said, 'The best among you are those who learn the Quran and teach it.'",
+      "title": "Name dropped — narrator removed"
+    },
+    {
+      "description": "A verse reference is changed (2:255 → 2:256) and a hadith collection reference ('Sahih Muslim') present in the source disappears from the draft.",
+      "draft_lang": "en",
+      "draft_text": "This is stated in Quran 2:256.",
+      "expected_flags": [
+        "references"
+      ],
+      "id": "references-altered",
+      "source_lang": "en",
+      "source_text": "This is stated in Quran 2:255 and explained in Sahih Muslim.",
+      "title": "Reference altered and dropped"
+    },
+    {
+      "description": "Source and draft carry the same meaning with equivalent wording. RajiAI should raise zero flags here. A quiet result is a correct result.",
+      "draft_lang": "en",
+      "draft_text": "And He is the Most High, the Most Great. There is no compulsion in religion.",
+      "expected_flags": [],
+      "id": "clean-control",
+      "source_lang": "en",
+      "source_text": "And He is the Most High, the Most Great. There is no compulsion in religion.",
+      "title": "Clean control — no changes"
+    },
+    {
+      "id": "negation-partial-neither-nor",
+      "title": "Partial negation dropped — 'nor' removed",
+      "description": "Only one half of a 'neither/nor' pair survives in the draft. Marker count goes 2 → 1, so RajiAI must flag high-severity negation. A tough partial-drop case.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "Neither drowsiness nor sleep overtakes Him.",
+      "draft_text": "Neither drowsiness or sleep overtakes Him.",
+      "expected_flags": [
+        "negation"
+      ]
+    },
+    {
+      "id": "negation-added",
+      "title": "Negation added by the draft",
+      "description": "The draft inserts 'not', reversing the meaning in the opposite direction. RajiAI must flag medium-severity added negation. Note: a low-severity key-term flag on 'loves'/'love' may also appear (no stemming) — a good false-alarm demo for the reviewer.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "Indeed, Allah loves the doers of good.",
+      "draft_text": "Indeed, Allah does not love the doers of good.",
+      "expected_flags": [
+        "negation",
+        "names"
+      ]
+    },
+    {
+      "id": "negation-double-negative",
+      "title": "Double negative flattened",
+      "description": "'not uncommon' becomes 'common'. Marker count goes 1 → 0, so RajiAI must flag high-severity negation. A low key-term flag on 'uncommon'/'common' may also appear (no stemming) — reviewer marks it false alarm.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "It is not uncommon for the seeker to stumble.",
+      "draft_text": "It is common for the seeker to stumble.",
+      "expected_flags": [
+        "negation",
+        "names"
+      ]
+    },
+    {
+      "id": "numbers-arabic-indic-changed",
+      "title": "Number changed across digit scripts",
+      "description": "99 becomes ٩٨ (Arabic-Indic digits). RajiAI normalizes both scripts to ASCII before comparing, so it must flag a high-severity number change.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "Allah has 99 names.",
+      "draft_text": "Allah has ٩٨ names.",
+      "expected_flags": [
+        "numbers"
+      ]
+    },
+    {
+      "id": "numbers-word-dropped",
+      "title": "Number word dropped — 'five' removed",
+      "description": "The number checker only reads digits, not number words — a documented limitation. The new key-term coverage still surfaces the dropped 'five' as a low-severity flag so the reviewer sees it.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "Pray the five daily prayers: Fajr, Dhuhr, Asr, Maghrib, Isha.",
+      "draft_text": "Pray the daily prayers: Fajr, Dhuhr, Asr, Maghrib, Isha.",
+      "expected_flags": [
+        "names"
+      ]
+    },
+    {
+      "id": "names-transliteration-variant",
+      "title": "Name respelled — Hurairah vs Hurayrah",
+      "description": "Same narrator, different transliteration. RajiAI cannot know they match, so it must surface 'hurairah' as a medium key-term flag. The reviewer — not the tool — decides it is the same person. A perfect 'human decides' case.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "Narrated by Abu Hurairah: seek knowledge.",
+      "draft_text": "Narrated by Abu Hurayrah: seek knowledge.",
+      "expected_flags": [
+        "names"
+      ]
+    },
+    {
+      "id": "names-arabic-narrator-dropped",
+      "title": "Narrator dropped in Arabic",
+      "description": "أبي هريرة (Abu Hurairah) is dropped from an Arabic narration while البخاري stays. The Arabic-script name heuristic must flag it as medium.",
+      "source_lang": "ar",
+      "draft_lang": "ar",
+      "source_text": "رواه البخاري عن أبي هريرة رضي الله عنه",
+      "draft_text": "رواه البخاري رضي الله عنه",
+      "expected_flags": [
+        "names"
+      ]
+    },
+    {
+      "id": "keyterm-say-dropped",
+      "title": "Dropped 'Say' — Surah Al-Ikhlas (112:1), found by manual testing",
+      "description": "The draft drops the opening imperative 'Say' (قُل) and weakens 'Indivisible' to 'divisible'. The name check flags 'indivisible' (medium); the key-term coverage flags 'say' (low). Added after Taha caught this miss by hand-testing on 2026-10-04.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "Say, \"O Prophet,\" \"He is Allah—One \"and Indivisible\";",
+      "draft_text": "\"O Prophet,\" \"He is Allah One \"and divisible\";",
+      "expected_flags": [
+        "names",
+        "names"
+      ]
+    },
+    {
+      "id": "references-surah-changed",
+      "title": "Surah reference swapped",
+      "description": "Surah Al-Baqarah becomes Surah Al-Imran. The surah-mention pattern must flag it as a medium reference change.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "In Surah Al-Baqarah, Allah says: ...",
+      "draft_text": "In Surah Al-Imran, Allah says: ...",
+      "expected_flags": [
+        "references"
+      ]
+    },
+    {
+      "id": "references-collection-dropped",
+      "title": "Hadith collection dropped",
+      "description": "'Sahih Muslim' disappears from the draft. The collection patterns flag both parts (sahih, muslim) as medium reference drops.",
+      "source_lang": "en",
+      "draft_lang": "en",
+      "source_text": "As explained in Sahih Muslim, the matter is clear.",
+      "draft_text": "As explained in the commentary, the matter is clear.",
+      "expected_flags": [
+        "references",
+        "references"
+      ]
+    },
+    {
+      "id": "clean-cross-lingual-simple",
+      "title": "Clean control — cross-lingual, no flags",
+      "description": "A correct short translation with no planted error. Nothing checkable changed, so no flags are expected.",
+      "source_lang": "en",
+      "draft_lang": "ar",
+      "source_text": "patience is a virtue.",
+      "draft_text": "الصبر فضيلة.",
+      "expected_flags": []
+    }
+  ]
+}
