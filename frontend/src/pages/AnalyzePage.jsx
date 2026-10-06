@@ -9,6 +9,8 @@ export function AnalyzePage({ initial, onAnalyzed, onGoDemo }) {
   const [draftLang, setDraftLang] = useState(initial.draftLang || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [sourceFileName, setSourceFileName] = useState('');
+  const [draftFileName, setDraftFileName] = useState('');
 
   const LANGS = [
     { code: '', label: 'Auto-detect' },
@@ -25,13 +27,23 @@ export function AnalyzePage({ initial, onAnalyzed, onGoDemo }) {
     </select>
   );
 
-  const readFile = (setter) => (e) => {
+  const readFile = (setter, setName) => (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setName(file.name);
     const reader = new FileReader();
     reader.onload = () => setter(String(reader.result || ''));
     reader.readAsText(file);
   };
+
+  const UploadIcon = (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="17 8 12 3 7 8" />
+      <line x1="12" y1="3" x2="12" y2="15" />
+    </svg>
+  );
 
   const run = async () => {
     setError('');
@@ -89,18 +101,26 @@ export function AnalyzePage({ initial, onAnalyzed, onGoDemo }) {
             <label><strong>Source text</strong></label>
             <textarea value={sourceText} onChange={(e) => setSourceText(e.target.value)}
               placeholder="e.g. Neither drowsiness nor sleep overtakes Him." dir="auto" />
-            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <div className="controls-row">
               {langSelect(sourceLang, setSourceLang)}
-              <input type="file" accept=".txt,.md" onChange={readFile(setSourceText)} />
+              <label className="file-btn" title="Upload a .txt or .md file">
+                {UploadIcon}
+                <span>{sourceFileName || 'Choose file'}</span>
+                <input type="file" accept=".txt,.md" onChange={readFile(setSourceText, setSourceFileName)} />
+              </label>
             </div>
           </div>
           <div>
             <label><strong>Draft translation</strong></label>
             <textarea value={draftText} onChange={(e) => setDraftText(e.target.value)}
               placeholder="e.g. اسے اونگھ آتی ہے اور نیند آتی ہے۔" dir="auto" />
-            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <div className="controls-row">
               {langSelect(draftLang, setDraftLang)}
-              <input type="file" accept=".txt,.md" onChange={readFile(setDraftText)} />
+              <label className="file-btn" title="Upload a .txt or .md file">
+                {UploadIcon}
+                <span>{draftFileName || 'Choose file'}</span>
+                <input type="file" accept=".txt,.md" onChange={readFile(setDraftText, setDraftFileName)} />
+              </label>
             </div>
           </div>
         </div>
