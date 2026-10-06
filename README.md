@@ -9,7 +9,7 @@ It aligns a source passage with its draft translation by meaning, then flags ris
 > RajiAI never declares a translation religiously correct. That judgment belongs to a
 > qualified human expert.
 
-**Live demo:** <paste frontend URL after deploy> · **API:** <paste backend URL after deploy>
+**Live demo:** [<paste frontend URL after deploy>](https://raji-ai.vercel.app) · **API:** [<paste backend URL after deploy>](https://khanlala12500000--raji-ai-web.modal.run)
 
 ## Safety boundaries (hard requirements)
 
